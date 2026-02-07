@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Appointment Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>Health Portal</header>
+  <div class="container">
+
+    <!-- REGISTER -->
+    <div id="registerPage" class="panel auth">
+      <h2>Create an account</h2>
+      <label for="regEmail">Email</label>
+      <input id="regEmail" type="email" placeholder="you@example.com">
+      <label for="regPassword">Password</label>
+      <input id="regPassword" type="password" placeholder="Create a password">
+      <button id="btnRegister">Register</button>
+      <p class="muted">Already have an account? <a href="#" id="linkToLogin">Login</a></p>
+      <p id="regMsg" class="msg"></p>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginPage" class="panel auth">
+      <h2>Login</h2>
+      <label for="logEmail">Email</label>
+      <input id="logEmail" type="email" placeholder="you@example.com">
+      <label for="logPassword">Password</label>
+      <input id="logPassword" type="password" placeholder="Enter your password">
+      <button id="btnLogin">Login</button>
+      <p class="muted">No account? <a href="#" id="linkToRegister">Register</a></p>
+      <p id="logMsg" class="msg"></p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="panel">
+      <div class="row" style="align-items:center;margin-bottom:8px">
+        <div>
+          <h2>Dashboard</h2>
+          <div class="muted" id="welcomeUser"></div>
+        </div>
+        <div class="right"><button id="btnLogout" class="btn-secondary">Logout</button></div>
+      </div>
+
+      <nav class="tabs">
+        <button data-tab="tabPatients" class="active">Patients</button>
+        <button data-tab="tabAppointments">Appointments</button>
+        <button data-tab="tabPrescriptions">Prescriptions</button>
+        <button data-tab="tabHistory">Patient History</button>
+      </nav>
+
+      <!-- Patients -->
+      <section id="tabPatients">
+        <h3>Patient Record (Create / Update)</h3>
+        <div class="grid-2">
+          <div>
+            <input type="hidden" id="patId">
+            <label>Full Name</label>
+            <input id="patName" placeholder="e.g. Amina Khan">
+            <label>Address</label>
+            <textarea id="patAddress" placeholder="123 High Street, London, NW1"></textarea>
+            <label>Telephone</label>
+            <input id="patPhone" placeholder="07xxxxxxxxx">
+          </div>
+          <div>
+            <label>Date of Birth</label>
+            <input id="patDOB" type="date">
+            <label>NHS Number</label>
+            <input id="patNHS" placeholder="10-digit NHS number">
+            <div class="row">
+              <button id="savePatient">Save / Update</button>
+              <button id="resetPatient" class="btn-secondary">Clear</button>
+              <button id="deletePatient" class="btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:18px">Patients List</h3>
+        <table id="patientsTable">
+          <thead>
+            <tr><th>Name</th><th>DOB</th><th>NHS #</th><th>Phone</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Appointments -->
+      <section id="tabAppointments" class="hidden">
+        <h3>Book Appointment</h3>
+        <div class="grid-2">
+          <div>
+            <label>Patient</label>
+            <select id="apptPatient"></select>
+            <label>Date</label>
+            <input id="apptDate" type="date">
+            <label>Time</label>
+            <input id="apptTime" type="time">
+          </div>
+          <div>
+            <label>Reason</label>
+            <textarea id="apptReason" placeholder="Check-up, repeat BP review, etc."></textarea>
+            <div class="row">
+              <button id="saveAppt">Book</button>
+              <button id="resetAppt" class="btn-secondary">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:18px">Appointments</h3>
+        <table id="apptsTable">
+          <thead>
+            <tr><th>Patient</th><th>Date</th><th>Time</th><th>Reason</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Prescriptions -->
+      <section id="tabPrescriptions" class="hidden">
+        <h3>Request Prescription</h3>
+        <div class="grid-2">
+          <div>
+            <label>Patient</label>
+            <select id="rxPatient"></select>
+            <label>Medicine</label>
+            <input id="rxDrug" placeholder="e.g. Amoxicillin 500mg">
+          </div>
+          <div>
+            <label>Quantity / Notes</label>
+            <textarea id="rxNotes" placeholder="e.g. 21 capsules, TDS for 7 days"></textarea>
+            <div class="row">
+              <button id="saveRx">Request</button>
+              <button id="resetRx" class="btn-secondary">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:18px">Prescription Requests</h3>
+        <table id="rxTable">
+          <thead>
+            <tr><th>Patient</th><th>Medicine</th><th>Notes</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- History -->
+      <section id="tabHistory" class="hidden">
+        <h3>Patient History / Notes</h3>
+        <div class="grid-2">
+          <div>
+            <label>Patient</label>
+            <select id="histPatient"></select>
+            <label>Note</label>
+            <textarea id="histNote" placeholder="Add clinical notes / history"></textarea>
+          </div>
+          <div>
+            <label>Medicines (comma-separated)</label>
+            <input id="histMeds" placeholder="e.g. Paracetamol 500mg, Ibuprofen 200mg">
+            <div class="row">
+              <button id="saveHist">Add to History</button>
+              <button id="resetHist" class="btn-secondary">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:18px">History Records</h3>
+        <table id="histTable">
+          <thead>
+            <tr><th>Patient</th><th>Note</th><th>Medicines</th><th>Date</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </div>
+
+    <footer>© 2025 Health Portal — Prototype (LocalStorage)</footer>
+  </div>
+
+  <script>
+    // ---------- Storage helpers ----------
+    const LS = {
+      get(key, def){ try{ const v = localStorage.getItem(key); return v? JSON.parse(v): def; }catch{ return def; } },
+      set(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+    };
+
+    // Collections in localStorage
+    const KEYS = {
+      users: 'hp_users',
+      current: 'hp_current_user',
+      patients: 'hp_patients',
+      appts: 'hp_appointments',
+      rx: 'hp_prescriptions',
+      hist: 'hp_history'
+    };
+
+    // ---------- Auth UI ----------
+    const registerPage = document.getElementById('registerPage');
+    const loginPage = document.getElementById('loginPage');
+    const dashboard = document.getElementById('dashboard');
+
+    const regEmail = document.getElementById('regEmail');
+    const regPassword = document.getElementById('regPassword');
+    const btnRegister = document.getElementById('btnRegister');
+    const regMsg = document.getElementById('regMsg');
+
+    const logEmail = document.getElementById('logEmail');
+    const logPassword = document.getElementById('logPassword');
+    const btnLogin = document.getElementById('btnLogin');
+    const logMsg = document.getElementById('logMsg');
+
+    const linkToLogin = document.getElementById('linkToLogin');
+    const linkToRegister = document.getElementById('linkToRegister');
+    const btnLogout = document.getElementById('btnLogout');
+    const welcomeUser = document.getElementById('welcomeUser');
+
+    function show(el){ el.style.display='block'; }
+    function hide(el){ el.style.display='none'; }
+    function setMsg(node, text, ok=false){ node.textContent=text; node.className = 'msg ' + (ok?'ok':'err'); }
+
+    function showLogin(){
+      hide(registerPage); show(loginPage); hide(dashboard);
+      logMsg.textContent=''; regMsg.textContent='';
+    }
+    function showRegister(){
+      show(registerPage); hide(loginPage); hide(dashboard);
+      logMsg.textContent=''; regMsg.textContent='';
+    }
+    function showDashboard(){
+      hide(registerPage); hide(loginPage); show(dashboard);
+      const user = LS.get(KEYS.current,null);
+      welcomeUser.textContent = user ? ('Signed in as ' + user) : '';
+      renderAll();
+    }
+
+    linkToLogin.addEventListener('click', e=>{ e.preventDefault(); showLogin(); });
+    linkToRegister.addEventListener('click', e=>{ e.preventDefault(); showRegister(); });
+
+    btnRegister.addEventListener('click', ()=>{
+      const email = (regEmail.value||'').trim().toLowerCase();
+      const pass = regPassword.value || '';
+      if(!email || !pass){ setMsg(regMsg,'Please enter email and password.'); return; }
+      const users = LS.get(KEYS.users,[]);
+      if(users.find(u=>u.email===email)){ setMsg(regMsg,'User already exists.'); return; }
+      users.push({email, pass});
+      LS.set(KEYS.users, users);
+      setMsg(regMsg,'Account created. You can login now.', true);
+      regEmail.value=''; regPassword.value='';
+    });
+
+    btnLogin.addEventListener('click', ()=>{
+      const email = (logEmail.value||'').trim().toLowerCase();
+      const pass = logPassword.value || '';
+      const users = LS.get(KEYS.users,[]);
+      const ok = users.find(u=>u.email===email && u.pass===pass);
+      if(!ok){ setMsg(logMsg,'Invalid credentials.'); return; }
+      LS.set(KEYS.current, email);
+      showDashboard();
+    });
+
+    btnLogout.addEventListener('click', ()=>{
+      localStorage.removeItem(KEYS.current);
+      showLogin();
+    });
+
+    // initial route
+    (function initRoute(){
+      const cur = LS.get(KEYS.current,null);
+      if(cur) showDashboard(); else showLogin();
+    })();
+
+    // ---------- Tabs ----------
+    const tabButtons = Array.from(document.querySelectorAll('nav.tabs button'));
+    const tabs = {
+      tabPatients: document.getElementById('tabPatients'),
+      tabAppointments: document.getElementById('tabAppointments'),
+      tabPrescriptions: document.getElementById('tabPrescriptions'),
+      tabHistory: document.getElementById('tabHistory')
+    };
+    tabButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        tabButtons.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        for(const k in tabs){ tabs[k].classList.add('hidden'); }
+        tabs[btn.dataset.tab].classList.remove('hidden');
+      });
+    });
+
+    // ---------- Patients ----------
+    const patId = document.getElementById('patId');
+    const patName = document.getElementById('patName');
+    const patAddress = document.getElementById('patAddress');
+    const patPhone = document.getElementById('patPhone');
+    const patDOB = document.getElementById('patDOB');
+    const patNHS = document.getElementById('patNHS');
+    const patientsTable = document.querySelector('#patientsTable tbody');
+
+document.getElementById('savePatient').addEventListener('click', ()=>{
+      const name=(patName.value||'').trim();
+      if(!name){ alert('Name is required'); return; }
+      let pts = LS.get(KEYS.patients,[]);
+      const id = patId.value ? Number(patId.value) : Date.now();
+      const item = {
+        id, name,
+        address: patAddress.value||'',
+        phone: patPhone.value||'',
+        dob: patDOB.value||'',
+        nhs: patNHS.value||''
+      };
+      const idx = pts.findIndex(p=>p.id===id);
+      if(idx>=0) pts[idx]=item; else pts.push(item);
+      LS.set(KEYS.patients, pts);
+      clearPatientForm();
+      renderPatients();
+      renderPatientOptions();
+    });
+
+    document.getElementById('resetPatient').addEventListener('click', clearPatientForm);
+    document.getElementById('deletePatient').addEventListener('click', ()=>{
+      if(!patId.value){ alert('Load a patient first (Edit).'); return; }
+      let pts = LS.get(KEYS.patients,[]);
+      pts = pts.filter(p=>p.id!==Number(patId.value));
+      LS.set(KEYS.patients, pts);
+      clearPatientForm();
+      renderPatients();
+      renderPatientOptions();
+    });
+
+    function clearPatientForm(){
+      patId.value=''; patName.value=''; patAddress.value='';
+      patPhone.value=''; patDOB.value=''; patNHS.value='';
+    }
+
+    function renderPatients(){
+      const pts = LS.get(KEYS.patients,[]);
+      patientsTable.innerHTML = pts.map(p=>`
+        <tr>
+          <td>${escapeHtml(p.name)}</td>
+          <td>${escapeHtml(p.dob||'')}</td>
+          <td>${escapeHtml(p.nhs||'')}</td>
+          <td>${escapeHtml(p.phone||'')}</td>
+          <td>
+            <button data-act="edit" data-id="${p.id}">Edit</button>
+            <button class="btn-danger" data-act="del" data-id="${p.id}">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    patientsTable.addEventListener('click', (e)=>{
+      const id = Number(e.target.getAttribute('data-id'));
+      const act = e.target.getAttribute('data-act');
+      if(!id || !act) return;
+      let pts = LS.get(KEYS.patients,[]);
+      if(act==='edit'){
+        const p = pts.find(x=>x.id===id);
+        if(!p) return;
+        patId.value=p.id; patName.value=p.name; patAddress.value=p.address;
+        patPhone.value=p.phone; patDOB.value=p.dob; patNHS.value=p.nhs;
+        tabButtons.forEach(b=>{ if(b.dataset.tab==='tabPatients') b.classList.add('active'); else b.classList.remove('active'); });
+        for(const k in tabs){ tabs[k].classList.add('hidden'); }
+        tabs.tabPatients.classList.remove('hidden');
+      }else if(act==='del'){
+        pts = pts.filter(x=>x.id!==id);
+        LS.set(KEYS.patients, pts);
+        renderPatients(); renderPatientOptions();
+      }
+    });
+
+    // ---------- Appointments ----------
+    const apptPatient = document.getElementById('apptPatient');
+    const apptDate = document.getElementById('apptDate');
+    const apptTime = document.getElementById('apptTime');
+    const apptReason = document.getElementById('apptReason');
+    const apptsTable = document.querySelector('#apptsTable tbody');
+
+    document.getElementById('saveAppt').addEventListener('click', ()=>{
+      const pid = Number(apptPatient.value);
+      if(!pid){ alert('Select a patient'); return; }
+      const date = apptDate.value||''; const time = apptTime.value||''; const reason = apptReason.value||'';
+      if(!date || !time){ alert('Select date and time'); return; }
+      const appts = LS.get(KEYS.appts,[]);
+      appts.push({ id: Date.now(), pid, date, time, reason });
+      LS.set(KEYS.appts, appts);
+      apptDate.value=''; apptTime.value=''; apptReason.value='';
+      renderAppts();
+      alert('Appointment booked.');
+    });
+    document.getElementById('resetAppt').addEventListener('click', ()=>{
+      apptDate.value=''; apptTime.value=''; apptReason.value='';
+    });
+    apptsTable.addEventListener('click', (e)=>{
+      const id = Number(e.target.getAttribute('data-id'));
+      if(e.target.getAttribute('data-act')==='del' && id){
+        let appts = LS.get(KEYS.appts,[]);
+        appts = appts.filter(a=>a.id!==id);
+        LS.set(KEYS.appts, appts);
+        renderAppts();
+      }
+    });
+
+    function renderAppts(){
+      const appts = LS.get(KEYS.appts,[]);
+      const pts = LS.get(KEYS.patients,[]);
+      apptsTable.innerHTML = appts.map(a=>{
+        const p = pts.find(x=>x.id===a.pid);
+        const pname = p? p.name : '(deleted patient)';
+        return `
+          <tr>
+            <td>${escapeHtml(pname)}</td>
+            <td>${escapeHtml(a.date)}</td>
+            <td>${escapeHtml(a.time)}</td>
+            <td>${escapeHtml(a.reason)}</td>
+            <td><button class="btn-danger" data-act="del" data-id="${a.id}">Delete</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ---------- Prescriptions ----------
+    const rxPatient = document.getElementById('rxPatient');
+    const rxDrug = document.getElementById('rxDrug');
+    const rxNotes = document.getElementById('rxNotes');
+    const rxTable = document.querySelector('#rxTable tbody');
+
+    document.getElementById('saveRx').addEventListener('click', ()=>{
+      const pid = Number(rxPatient.value);
+      const med = (rxDrug.value||'').trim();
+      if(!pid || !med){ alert('Patient and medicine are required'); return; }
+      const list = LS.get(KEYS.rx,[]);
+      list.push({ id: Date.now(), pid, med, notes: rxNotes.value||'' });
+      LS.set(KEYS.rx, list);
+      rxDrug.value=''; rxNotes.value='';
+      renderRx();
+      alert('Prescription request saved.');
+    });
+    document.getElementById('resetRx').addEventListener('click', ()=>{
+      rxDrug.value=''; rxNotes.value='';
+    });
+    rxTable.addEventListener('click', (e)=>{
+      const id = Number(e.target.getAttribute('data-id'));
+      if(e.target.getAttribute('data-act')==='del' && id){
+        let list = LS.get(KEYS.rx,[]);
+        list = list.filter(x=>x.id!==id);
+        LS.set(KEYS.rx, list);
+        renderRx();
+      }
+    });
+
+    function renderRx(){
+      const list = LS.get(KEYS.rx,[]);
+      const pts = LS.get(KEYS.patients,[]);
+      rxTable.innerHTML = list.map(x=>{
+        const p = pts.find(v=>v.id===x.pid);
+        const pname = p? p.name : '(deleted patient)';
+        return `
+          <tr>
+            <td>${escapeHtml(pname)}</td>
+            <td>${escapeHtml(x.med)}</td>
+            <td>${escapeHtml(x.notes)}</td>
+            <td><button class="btn-danger" data-act="del" data-id="${x.id}">Delete</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ---------- History ----------
+    const histPatient = document.getElementById('histPatient');
+    const histNote = document.getElementById('histNote');
+    const histMeds = document.getElementById('histMeds');
+    const histTable = document.querySelector('#histTable tbody');
+
+    document.getElementById('saveHist').addEventListener('click', ()=>{
+      const pid = Number(histPatient.value);
+      const note = (histNote.value||'').trim();
+      const meds = (histMeds.value||'').trim();
+      if(!pid || !note){ alert('Patient and note are required'); return; }
+      const list = LS.get(KEYS.hist,[]);
+      list.push({ id: Date.now(), pid, note, meds, created: new Date().toISOString().slice(0,10) });
+      LS.set(KEYS.hist, list);
+      histNote.value=''; histMeds.value='';
+      renderHist();
+      alert('History updated.');
+    });
+    document.getElementById('resetHist').addEventListener('click', ()=>{
+      histNote.value=''; histMeds.value='';
+    });
+    histTable.addEventListener('click', (e)=>{
+      const id = Number(e.target.getAttribute('data-id'));
+      if(e.target.getAttribute('data-act')==='del' && id){
+        let list = LS.get(KEYS.hist,[]);
+        list = list.filter(x=>x.id!==id);
+        LS.set(KEYS.hist, list);
+        renderHist();
+      }
+    });
+
+    function renderHist(){
+      const list = LS.get(KEYS.hist,[]);
+      const pts = LS.get(KEYS.patients,[]);
+      histTable.innerHTML = list.map(x=>{
+        const p = pts.find(v=>v.id===x.pid);
+        const pname = p? p.name : '(deleted patient)';
+        return `
+          <tr>
+            <td>${escapeHtml(pname)}</td>
+            <td>${escapeHtml(x.note)}</td>
+            <td>${escapeHtml(x.meds)}</td>
+            <td>${escapeHtml(x.created)}</td>
+            <td><button class="btn-danger" data-act="del" data-id="${x.id}">Delete</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ---------- Shared helpers ----------
+    function renderPatientOptions(){
+      const pts = LS.get(KEYS.patients,[]);
+      const opts = pts.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+      [apptPatient, rxPatient, histPatient].forEach(sel=>{
+        sel.innerHTML = '<option value="">Select patient</option>' + opts;
+      });
+    }
+
+    function renderAll(){
+      renderPatients();
+      renderPatientOptions();
+      renderAppts();
+      renderRx();
+      renderHist();
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+  </script>
+</body>
+</html>
